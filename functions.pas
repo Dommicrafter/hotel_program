@@ -14,7 +14,7 @@ uses classes, records, Klassen;
   function parseFileToUserStrings(filename : string): TUserObject;
   function writeUserStringsToFile(filename : String; username : string; paswd : string; user :TUserObject): TUserObject;
   function SichereHotelEingabe(input : string): Boolean ;
-  function getHotelIndex(hotels:THotelsArray; titel: String): Integer;
+  function getHotelIndex(hotels:THotelsObject; titel: String): Integer;
 
 implementation
 
@@ -110,16 +110,16 @@ begin
 end;
 
 //Exitcode 0 = Kein Hotel gefunden!
-function getHotelIndex(hotels:THotelsArray; titel: String): Integer;
+function getHotelIndex(hotels:THotelsObject; titel: String): Integer;
 var
   i : Integer;
 begin
   Result := 0;
-  for i := 1 to Length(hotels) do
+  for i := 0 to hotels.size()-1 do
   begin
-    if hotels[i].titel = titel then
+    if hotels.getHotel(i).titel = titel then
       Result := i
-    else if LowerCase(hotels[i].titel) = LowerCase(titel) then
+    else if LowerCase(hotels.getHotel(i).titel) = LowerCase(titel) then
       Result := i;
   end;
   if Result = 0 then

@@ -12,7 +12,7 @@ uses sysutils, records, loginCommands, hotelCommands, classes, functions, Klasse
 
 var
   user : TUserObject;
-  hotels : THotelsArray;
+  hotels : THotelsObject;
   i : Integer;
   loginExitCode : Integer;
   input : string;
@@ -20,7 +20,8 @@ var
   inputArgs : TUndefinedStringArray;
   exitLoop : Boolean;
 
-const filename = 'credentialData.dat';
+const filenameUsers = 'credentialData.dat';
+const filenameHotels = 'hotel.list';
 
 
 //Die Argumente jedes Inputs in einer Liste
@@ -39,9 +40,9 @@ end;
 
 begin
 
-  hotels := initializeHotels(hotels, 'hotel.list');
+  hotels := initializeHotels(filenameHotels);
   stringSplitter := TStringList.Create();
-  user := parseFileToUserStrings('credentialData.dat');
+  user := parseFileToUserStrings(filenameUsers);
 
   //Command Loop
   exitLoop := false;
@@ -66,9 +67,9 @@ begin
           if loginExitCode = 0 then
             WriteLn('Du musst eingeloggt sein um diesen Command auszufuehren! Nutze den Command : login')
           else
-            startHotelAlgorithm(hotels, inputArgs);
+            hotels := startHotelAlgorithm(hotels, inputArgs, filenameHotels);
         end;
-      'register': addCredentials(filename, user, inputArgs);
+      'register': addCredentials(filenameUsers, user, inputArgs);
       'zeitmessung': zeitmessung();
       //TODO: help hinzufügen!
     else
@@ -81,6 +82,6 @@ begin
 
   stringSplitter.Free();
   user.Free();
-
+  hotels.Free();
 
 end.
