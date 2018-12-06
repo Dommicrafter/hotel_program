@@ -27,12 +27,11 @@ begin
   Result := THotelsObject.Create();
   reader := TStringList.Create();
   reader.LoadFromFile(filename);
-
   for j := 0 to reader.Count-1 do
   begin
   splitter := TStringList.Create();
   split(' ',reader[j],splitter);
-  hotel.name := IntToStr(j+1);
+  hotel.name := IntToStr(j);
   hotel.titel := splitter[0];
   hotel.distanceNext := StrToInt(splitter[1]);
 
@@ -42,7 +41,7 @@ begin
   end;
   reader.Free();
 end;
-
+//Hotels werden in Datei geschrieben
 function writeHotel(filename : string; hotel : THotels; hotels: THotelsObject): THotelsObject;
 var i : Integer;
     writer : TStringList;
@@ -59,7 +58,7 @@ begin
   WriteLn(hotel.titel, ' wurde erfolgreich hinzugefügt!');
   Result := initializeHotels(filename);
 end;
-
+//Abfrage wie Hotel heißen soll etc.
 function addHotel(filename: string; hotels: THotelsObject ; args : TUndefinedStringArray): THotelsObject ;
 var inputName : string;
     index, hoteldistance : Integer;
@@ -68,7 +67,7 @@ begin
   case Length(args) of
     1 :
     begin
-      index := SichereEingabe('An welche Position soll das Hotel eingefügt werden? ');
+      index := SichereEingabe('An welche Position soll das Hotel eingefügt werden? ') -1;
       WriteLn('Hotel Name eingeben: ');
       Readln(inputName);
       hoteldistance := SichereEingabe('Entfernung zum nächsten Hotel angeben:');
@@ -76,7 +75,7 @@ begin
     2:
     begin
       try
-        index := StrToInt(args[1]);
+        index := StrToInt(args[1])-1;
       except
         on E : EConvertError do
         begin
@@ -91,7 +90,7 @@ begin
     3:
     begin
       try
-        index := StrToInt(args[1]);
+        index := StrToInt(args[1]) -1;
       except
         on E : EConvertError do
         begin
@@ -104,7 +103,7 @@ begin
     4:
     begin
       try
-        index := StrToInt(args[1]);
+        index := StrToInt(args[1])-1;
         hoteldistance := StrToInt(args[3]);
       except
         on E : EConvertError do
@@ -148,13 +147,13 @@ begin
     else if args[0] = 'list' then
       for i := 0 to hotels.size() -1 do
       begin
-        WriteLn('Hotel Nr.: ',hotels.getHotel(i).name,' Hotel Name: ', hotels.getHotel(i).titel, '. Entfernung bis zum nächstem Hotel beträgt: ', hotels.getHotel(i).distanceNext, ' km.');
+        WriteLn('Hotel Nr.: ',i+1,' Hotel Name: ', hotels.getHotel(i).titel, '. Entfernung bis zum naechstem Hotel beträgt: ', hotels.getHotel(i).distanceNext, ' km.');
       end
     else if args[0] = 'add' then
       Result := addHotel(HotelFilename, hotels, args)
     else
     begin
-      WriteLn('False Arguments:  simple(Gibt den einfachen Algorithmus bis zum nächsten Hotel aus) complex(Von Hotel bis Hotel) list(Liste von allen Hotels)');
+      WriteLn('sssssssssssFalse Arguments:  simple(Gibt den einfachen Algorithmus bis zum naechsten Hotel aus) complex(Von Hotel bis Hotel) list(Liste von allen Hotels)');
       WriteLn('Usage hotel [argument]');
     end;
 
